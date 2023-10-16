@@ -1,6 +1,4 @@
-
-
- // Import and require mysql2 and inquirer
+// Import and require mysql2 and inquirer
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 
@@ -33,6 +31,12 @@ const db = mysql.createConnection(
       if (answers.mainPrompt == "View all departments") {
         viewDepartments()
       }
+      if (answers.mainPrompt == "View all roles") {
+        viewRoles()
+      }
+      if (answers.mainPrompt == "View all employees") {
+        viewEmployees()
+      }
       if (answers.mainPrompt == "Add a role") {
         addRole()
       }
@@ -40,9 +44,38 @@ const db = mysql.createConnection(
     })
   }
 
+// View all departments - show formatted table w/ department names and department ids
 function viewDepartments() {
   const sql = `SELECT * FROM department;`;
   db.query(sql, (err, rows) => {
+    if (err) {
+      res.json({ error: err.message });
+       return;
+    }
+    console.table(rows);
+  });
+}
+
+// View all roles - show role id, role title, the department that role belongs to, and the salary for that role
+function viewRoles() {
+  const sql = `SELECT roles.id, roles.title, roles.salary, department.dept_name AS department FROM roles INNER JOIN department ON department.id = roles.department_id;`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.json({ error: err.message });
+       return;
+    }
+    console.table(rows);
+  });
+}
+
+// View all employees - show formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+function viewEmployees() {
+  const sql =  "SELECT employees.first_name, employees.last_name, roles.title, roles.salary, department.dept_name AS department, employees.manager_id " +
+  "FROM employees " +
+  "JOIN roles ON roles.id = employees.role_id " +
+  "JOIN department ON roles.department_id = department.id " +
+  "ORDER BY employees.id;"; 
+    db.query(sql, (err, rows) => {
     if (err) {
       res.json({ error: err.message });
        return;
