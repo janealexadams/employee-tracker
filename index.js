@@ -3,9 +3,6 @@
 // updateEmployee() - select an employee to update and their new role and this information is updated in the database
 
 
-
-
-
 // import and require mysql2 and inquirer
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
@@ -237,7 +234,7 @@ async function updateEmployee() {
 ])
 .then((answers) => {
   const updatedEmployeeInfo = [answers.updateEmployeeName, answers.updateEmployeeRole]
-  db.query("UPDATE roles SET role_id = ? WHERE id = ? VALUES(?,?)", updatedEmployeeInfo, (err, rows) => {
+  db.query("SELECT role_id, concat ( first_name, ':', GROUP_CONCAT ( last_name separator ' ' ) ) as "Employee Names" FROM employees;", updatedEmployeeInfo, (err, rows) => {
     if (err) {
       console.error({ error: err.message });
        return;
@@ -251,4 +248,3 @@ async function updateEmployee() {
 mainPrompt()
 
 
-SELECT role_id, concat ( first_name, ':', GROUP_CONCAT ( last_name separator ' ' ) ) as "Employee Names" FROM employees;
