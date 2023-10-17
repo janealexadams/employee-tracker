@@ -7,7 +7,9 @@ addEmployee() - user enters the employees first name, last name, role, and manag
 updateEmployee() - when the user updates the employee role and selects the employee to update, then their new role is updated in the database
     `UPDATE employees SET role_id = ? WHERE id = ? VALUES(?,?)`
 
+will show first and last name together: SELECT role_id, CONCAT(first_name, ' ', last_name) AS "Employee Names" FROM employees;
 
+SELECT role_id, CONCAT(first_name, ' ', last_name) AS "Employee Names" FROM employees;
 -- DONE
 viewDepartments() - show formatted table w/ department names and department ids
     `SELECT * FROM department;`
