@@ -1,5 +1,4 @@
 // FUNCTIONS I STILL NEED TO ADD:
-// function viewEmployees() - show employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 // function addEmployee() - prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 // updateEmployee() - select an employee to update and their new role and this information is updated in the database
 
@@ -172,7 +171,6 @@ async function addEmployee() {
     name: dept_name,
     value: id
   }))
-  const managerNames = 
   // WHEN I choose to add an employee THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
   .prompt([
     {
@@ -195,11 +193,11 @@ async function addEmployee() {
         type: 'list',
         name: 'addEmployeeManager',
         message: 'Select the manager for employee you would like to add.',
-        choices: ['John Doe', 'Mike Chan', 'Ashley Rodriguez', 'Kevin Tupik', 'Kunal Singh'], // this should be managerNames
+        choices: ['John Doe', 'Mike Chan', 'Ashley Rodriguez', 'Kevin Tupik', 'Kunal Singh'], 
     },
 ])
 .then((answers) => {
-  console.log(answers)
+  var managers = logicalOperators.slice(0,2);
   const employeeInfo = [answers.addEmployeeFirstName, answers.addEmployeeLastName, answers.addEmployeeRole, answers.addEmployeeManager]
   db.query("INSERT INTO employees(first_name, last_name, title, *manager name*) VALUES(?,?,?,?)", employeeInfo, (err, rows) => {
     if (err) {
@@ -216,7 +214,7 @@ async function addEmployee() {
 async function updateEmployee() {
   const [viewAllRoles] = await db.promise().query("SELECT * FROM roles")
   const roles = viewAllRoles.map(({id, title, salary, department_id}) => ({
-    name: dept_name,
+    name: title,
     value: id,
     amount: salary,
     value: department_id
@@ -239,7 +237,7 @@ async function updateEmployee() {
 ])
 .then((answers) => {
   const updatedEmployeeInfo = [answers.updateEmployeeName, answers.updateEmployeeRole]
-  db.query("UPDATE employees SET role_id = ? WHERE id = ? VALUES(?,?)", updatedEmployeeInfo, (err, rows) => {
+  db.query("UPDATE roles SET role_id = ? WHERE id = ? VALUES(?,?)", updatedEmployeeInfo, (err, rows) => {
     if (err) {
       console.error({ error: err.message });
        return;
@@ -253,3 +251,4 @@ async function updateEmployee() {
 mainPrompt()
 
 
+SELECT role_id, concat ( first_name, ':', GROUP_CONCAT ( last_name separator ' ' ) ) as "Employee Names" FROM employees;

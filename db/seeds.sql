@@ -25,12 +25,6 @@ VALUES ("John", "Doe", 5, NULL),
 
 
 
-
-
-
-
-
-
 -- Departments id's:
 -- Sales = 2
 -- Engineering = 1
