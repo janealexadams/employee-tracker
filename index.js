@@ -67,7 +67,7 @@ function viewDepartments() {
 
 // View all roles - show role id, role title, the department that role belongs to, and the salary for that role
 function viewRoles() {
-  const sql = `SELECT roles.id, roles.title, roles.salary, departments.dept_name AS department FROM roles INNER JOIN departments ON departments.id = roles.departments_id;`;
+  const sql = `SELECT roles.id, roles.title, roles.salary, departments.dept_name AS departments FROM roles INNER JOIN departments ON departments.id = roles.department_id;`;
   db.query(sql, (err, rows) => {
     if (err) {
       res.json({ error: err.message });
@@ -80,7 +80,7 @@ function viewRoles() {
 
 // View all employees - show formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 function viewEmployees() {
-  const sql =  "SELECT employees.first_name, employees.last_name, roles.title, roles.salary, departments.dept_name AS departments, employees.manager_id FROM employees JOIN roles ON roles.id = employees.role_id JOIN departments ON roles.departments_id = departments.id ORDER BY employees.id;"; 
+  const sql = `SELECT employees.first_name, employees.last_name, roles.title, roles.salary, departments.dept_name AS department, employees.manager_id FROM employees JOIN roles ON roles.id = employees.role_id JOIN departments ON roles.department_id = departments.id ORDER BY employees.id;`; 
     db.query(sql, (err, rows) => {
     if (err) {
       res.json({ error: err.message });
@@ -103,9 +103,8 @@ function addDepartment() {
      },
   ])
   .then((answers) => {
-    console.log(answers)
     const departmentInfo = [answers.addDepartment]
-    db.query("INSERT INTO department(dept_name) VALUES(?)", departmentInfo, (err, rows) => {
+    db.query("INSERT INTO departments(dept_name) VALUES(?)", departmentInfo, (err, rows) => {
       if (err) {
         console.error({ error: err.message });
          return;
@@ -119,7 +118,6 @@ function addDepartment() {
 // Add role to the database - prompt user to enter the name, salary, and department for the role and that role is added to the database
 async function addRole() {
   const [viewAllDepartments] = await db.promise().query("SELECT * FROM departments")
-  console.log(viewAllDepartments);
   const departments = viewAllDepartments.map(({id, dept_name}) => ({
     name: dept_name,
     value: id
@@ -145,7 +143,6 @@ async function addRole() {
     },
 ])
 .then((answers) => {
-  console.log(answers)
   const roleInfo = [answers.addRoleName, answers.addRoleSalary, answers.addRoleDepartment]
   db.query("INSERT INTO roles(title, salary, department_id) VALUES(?,?,?)", roleInfo, (err, rows) => {
     if (err) {
