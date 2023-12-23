@@ -20,14 +20,3 @@ VALUES ("John", "Doe", 5, NULL),
        ("Ashley", "Rodriguez", 1, 2),
        ("Kevin", "Tupik", 2, 3),
        ("Kunal", "Singh", 3, 4);
-
-
-
-
-
--- Departments id's:
--- Sales = 2
--- Engineering = 1
--- Finance = 3
--- Legal = 4
--- Customer Service = 5
